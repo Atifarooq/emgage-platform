@@ -24,6 +24,16 @@ export enum ValueEntityStatusColor {
   warning = 4,
 }
 
+export enum QueryTypeEnum {
+  filter = 'filter',
+  query = 'query'
+}
+
+export enum QueryKeyEnum {
+  term = 'term',
+  multi_match = 'multi_match'
+}
+
 export interface IEntityObject {
   id: number;
   name: string;

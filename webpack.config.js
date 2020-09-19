@@ -3,13 +3,14 @@ var fs = require('fs');
 var gracefulFs = require('graceful-fs');
 gracefulFs.gracefulify(fs);
 
+const dotenv = require('dotenv');
 const path = require('path');
 const webpack = require('webpack');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 const { TsConfigPathsPlugin } = require('awesome-typescript-loader');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-
+const envKeys = require('./config/webpack/dotenv')();
 const outputDirectory = 'dist';
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
 
   devtool: 'source-map',
 
-  entry: ['@babel/polyfill','./src/client/index.tsx'],
+  entry: ['@babel/polyfill', './src/client/index.tsx'],
 
   output: {
     path: path.join(__dirname, outputDirectory),
@@ -38,7 +39,7 @@ module.exports = {
     ],
     extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     plugins: [
-      new TsConfigPathsPlugin('./tsconfig.json'),
+      new TsConfigPathsPlugin('./tsconfig.json')
     ]
   },
 
@@ -55,6 +56,7 @@ module.exports = {
       filename: 'index.html',
       template: './src/client/index.html',
     }),
+    new webpack.DefinePlugin(envKeys)
   ],
 
   module: {
@@ -84,6 +86,7 @@ module.exports = {
           {
             loader: 'postcss-loader',
             options: {
+
             }
           },
           {
@@ -111,19 +114,19 @@ module.exports = {
         ],
       },
       {
-          test: /\.svg$/,
-          use: [
-            {
-              loader: 'svg-react-loader',
-            }
-          ]
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-react-loader',
+          }
+        ]
       },
       {
-          test: /\.(jpe?g|png|gif)$/i,
-          loaders: [
-              'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
-              'image-webpack-loader?bypassOnDebug=false'
-          ]
+        test: /\.(jpe?g|png|gif)$/i,
+        loaders: [
+          'file-loader?hash=sha512&digest=hex&name=[hash].[ext]',
+          'image-webpack-loader?bypassOnDebug=false'
+        ]
       },
       // {
       //   test: /engage-ui+[/\\].+\.scss/,

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { themr, ThemedComponentClass } from '@friendsofreactjs/react-css-themr';
 import { classNames } from '@shopify/react-utilities/styles';
-
+import bodybuilder from 'bodybuilder';
 import { AllowedEntityStatusColor, RequestStateEnum } from 'Types/Domain';
 import { IRoleDef } from '../Models/RoleDef';
 import DrawerSpinner from '../../../Common/Components/DrawerSpinner';
@@ -108,7 +108,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
         search: false,
         field: 'name',
       },
-      hideRow: { },
+      hideRow: {},
       loadingRole: false,
       nestedChildData: [],
     };
@@ -121,7 +121,6 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
 
   // Callback function when any row gets selected
   handleSelectRowCallback = (val: React.ReactText[]) => {
-
   }
 
   // Toggle dropdowns present in this component
@@ -131,7 +130,22 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
     });
   }
 
+  filterEnterPress = (event: React.FormEvent<HTMLElement>) => {
+    if (event['key'] === 'Enter') {
+      this.props.onFilter(event.currentTarget['value']);
+    }
+  }
 
+  searchKeyChanged = (event: string) => {
+    this.setState({
+      filterConfig: {
+        searchKey: event,
+        search: false,
+        field: 'name'
+      }
+    })
+  }
+  
   /**
    * Render the component to the DOM
    * @returns {}
@@ -154,7 +168,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
           {
             loadingRole ?
               <div className={theme.spinnerContainer}>
-                <DrawerSpinner componentClass={theme.espinner} spinnerText="Loading Roles"  />
+                <DrawerSpinner componentClass={theme.espinner} spinnerText="Loading Roles" />
               </div> : null
           }
 
@@ -186,8 +200,10 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
               <div className={searchFieldStyle}>
                 <TextField
                   label="Find a Role..."
-                  suffix={<Icon source="search" componentColor="inkLighter"/>}
+                  suffix={<Icon source="search" componentColor="inkLighter" />}
                   value={filterConfig.searchKey}
+                  onChange={this.searchKeyChanged}
+                  onKeyPress={this.filterEnterPress}
                 />
               </div>
 

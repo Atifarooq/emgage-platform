@@ -2,12 +2,6 @@ interface BulkActionType {
   selectedRow: Array<number | string>;
 }
 
-interface FilterType {
-  searchKey: string;
-  search: boolean;
-  field: string;
-}
-
 interface DropdownType {
   bulkAction?: HTMLElement;
   filter?: HTMLElement;
@@ -16,6 +10,12 @@ interface DropdownType {
 
 interface HideRowType {
   entityState?: number
+}
+
+export interface FilterType {
+  searchKey: string;
+  search: boolean;
+  field: string;
 }
 
 export interface TableNestedData {

@@ -1,15 +1,15 @@
 const fs = require('fs');
-
+const url = require('url');
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 const path = require('path');
 const elasticsearch = require('elasticsearch')
-const cors = require('cors')
+const cors = require('cors');
+const dotenv = require('dotenv').config();
 
 // Set up Elastic Search Client
 const bonsai_url = process.env.BONSAI_URL || "https://guqx1i71l0:2ghx17ht6@role-store-4717325882.us-east-1.bonsaisearch.net:443";
-console.dir(process.env);
 const client = new elasticsearch.Client({
   host: bonsai_url,
   log: 'trace'
@@ -38,20 +38,16 @@ function fetch_fn(req, res, next) {
 function searchRoles(req, res, next) {
   try {
     {
-      console.log('searchRoles');
-      console.log(req.body);
+      
+      const queryObject = url.parse(req.url, true).query;
+      const payload = {...queryObject, query: JSON.parse(queryObject.query)};
+      
       client.search({
-        body: req.body,
+        body: payload,
         index: 'roledefs'
       })
-        .then((e) => {console.log(e); res.json(e)})
-        .catch((c) => {console.log(c); res.json(c)});
-      // axios.default.get(bonsai_url + "/_search?pretty", {
-      //   data: req.body,
-      //   method: 'GET',
-      // })
-      //   .then(e => res.json(e))
-      //   .catch(e => res.json(e));
+        .then((e) => { res.json(e); })
+        .catch((c) => { res.json(c) });
     }
   } catch (err) {
     console.log(err.message);

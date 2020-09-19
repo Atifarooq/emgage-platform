@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ThemeContext } from '../../../Context';
-import { RoleDefState, RoleDefDispatch } from '../Models';
-import { fetchRoles, RoleList, LoadingRole, RoleDefProp } from "../Package";
+import { QueryTypeEnum, QueryKeyEnum } from 'Types/Domain';
+import { RoleDefState, RoleDefDispatch, RolePayload } from '../Models';
+import { fetchRoles, RoleList, LoadingRole, RoleDefProp, RoleDefaultPayload } from "../Package";
 import RoleListComponent from './RoleList';
 
 /**
@@ -10,14 +11,45 @@ import RoleListComponent from './RoleList';
  * Then list component calls different other components like create, members, etc
  * @extends React.Component
  */
-class RoleDefComponent extends React.Component<RoleDefProp> {
+class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
 
   constructor(props: RoleDefProp) {
     super(props);
   }
 
   componentDidMount() {
-    this.props.loadData();
+
+    this.setState({
+      payload: {
+        from: 1,
+        size: 20,
+        query: [{
+          type: QueryTypeEnum.filter,
+          key: QueryKeyEnum.term,
+          modelfield: 'entityState.itemID',
+          value: '5'
+        }]
+      }
+    }, () => {
+      this.props.loadData(this.state.payload);
+    });
+  }
+
+  fetchRoles = (query: any) => {
+
+    this.setState({
+      payload: {
+        ...this.state.payload, query: [...this.state.payload.query, ...[{
+          type: QueryTypeEnum.query,
+          key: QueryKeyEnum.multi_match,
+          modelfield: 'fields',
+          value: ['name', 'description'],
+          options: { 'query': query, 'type': 'phrase_prefix' }
+        }]]
+      }
+    }, () => {
+      this.props.loadData(this.state.payload);
+    });
   }
 
   render() {
@@ -29,7 +61,8 @@ class RoleDefComponent extends React.Component<RoleDefProp> {
               <RoleListComponent
                 theme={theme}
                 roleDefs={this.props.roles}
-
+                loadingState={this.props.loadingState}
+                onFilter={this.fetchRoles}
               />
             )
           }
@@ -43,12 +76,13 @@ const mapStateToProps = ({ rolesReducer }: any): RoleDefState => {
   return {
     roles: RoleList(rolesReducer),
     loadingState: LoadingRole(rolesReducer),
+    payload: RoleDefaultPayload()
   };
 };
 
 const mapDispatchToProps = (dispatch: any): RoleDefDispatch => {
   return {
-    loadData: () => dispatch(fetchRoles())
+    loadData: payload => dispatch(fetchRoles(payload))
   };
 };
 
