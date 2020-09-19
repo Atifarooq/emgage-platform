@@ -24,15 +24,23 @@ class RoleService extends HttpService {
             console.dir(payload);
 
             const query = bodybuilder().from(payload.from).size(payload.size);
+            
+            if (payload.filter && payload.filter.length) {
+                payload.filter.forEach(q => {
+                    if (q.type == QueryTypeEnum.filter)
+                        query.addFilter(q.key, q.modelfield, q.value)
+                });
+            }
 
-            payload.query.forEach(q => {
-                if (q.type == QueryTypeEnum.filter)
-                    query.addFilter(q.key, q.modelfield, q.value)
-                else if (q.type == QueryTypeEnum.query && q.key == QueryKeyEnum.multi_match)
-                    query.addQuery(q.type, q.modelfield, q.value, q.options)
-                else if (q.type == QueryTypeEnum.query && q.key !== QueryKeyEnum.multi_match)
-                    query.addQuery(q.type, q.modelfield, q.value)
-            });
+            if (payload.query && payload.query.length) {
+                payload.query.forEach(q => {
+                    if (q.type == QueryTypeEnum.query && q.key == QueryKeyEnum.multi_match)
+                        query.addQuery(q.key, q.modelfield, q.value, q.options)
+                    else if (q.type == QueryTypeEnum.query && q.key !== QueryKeyEnum.multi_match)
+                        query.addQuery(q.key, q.modelfield, q.value)
+                });
+            }
+
             // const query = bodybuilder()
             //     .from(0)
             //     .size(20)

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { ThemeContext } from '../../../Context';
 import { QueryTypeEnum, QueryKeyEnum } from 'Types/Domain';
-import { RoleDefState, RoleDefDispatch, RolePayload } from '../Models';
+import { RoleDefState, RoleDefDispatch } from '../Models';
 import { fetchRoles, RoleList, LoadingRole, RoleDefProp, RoleDefaultPayload } from "../Package";
 import RoleListComponent from './RoleList';
 
@@ -23,12 +23,13 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
       payload: {
         from: 1,
         size: 20,
-        query: [{
+        filter: [{
           type: QueryTypeEnum.filter,
           key: QueryKeyEnum.term,
           modelfield: 'entityState.itemID',
           value: '5'
-        }]
+        }],
+        query: []
       }
     }, () => {
       this.props.loadData(this.state.payload);
@@ -36,17 +37,23 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
   }
 
   fetchRoles = (query: any) => {
-
-    this.setState({
-      payload: {
-        ...this.state.payload, query: [...this.state.payload.query, ...[{
-          type: QueryTypeEnum.query,
-          key: QueryKeyEnum.multi_match,
-          modelfield: 'fields',
-          value: ['name', 'description'],
-          options: { 'query': query, 'type': 'phrase_prefix' }
-        }]]
-      }
+    if (query) {
+      this.setState({
+        payload: {
+          ...this.state.payload, query: [{
+            type: QueryTypeEnum.query,
+            key: QueryKeyEnum.multi_match,
+            modelfield: 'fields',
+            value: ['name', 'description'],
+            options: { 'query': query, 'type': 'phrase_prefix' }
+          }]
+        }
+      }, () => {
+        this.props.loadData(this.state.payload);
+      });
+    }
+    else this.setState({
+      payload: { ...this.state.payload, query: [] }
     }, () => {
       this.props.loadData(this.state.payload);
     });

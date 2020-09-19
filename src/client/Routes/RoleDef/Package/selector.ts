@@ -7,6 +7,7 @@ export const RoleDefaultPayload = (): RolePayload => {
     return {
         from: 0,
         size: 20,
+        filter: [],
         query: []
     }
 }
