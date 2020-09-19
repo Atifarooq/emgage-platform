@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { RequestStateEnum } from 'Types/Domain';
 import { IRolesListState, RolesActionEnum } from '../Models/RoleAction';
-import { RolesActions } from './types';
+import { RolesActions } from './Types';
 
 const rolesDefultListState: IRolesListState = {
   state: RequestStateEnum.INIT,

@@ -6,7 +6,7 @@ import {
   IActionRolesFetchSuccess,
   IRolesListState,
   RolesActionEnum
-} from '../Models/RoleAction';
+} from '../Models';
 import roleService from "../../../Services/role.service";
 
 // Action Creators
