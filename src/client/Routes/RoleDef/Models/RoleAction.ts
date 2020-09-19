@@ -1,6 +1,12 @@
 import { Action } from 'redux';
+import { RequestStateEnum } from 'Types/Domain';
 import { IRoleDef } from '../Models/RoleDef';
-import { RolesActionEnum, RequestStateEnum } from "../Package/constant";
+
+export enum RolesActionEnum {
+    ROLES_FETCH = 'ROLES_FETCH',
+    ROLES_FETCH_SUCCESS = 'ROLES_FETCH_SUCCESS',
+    ROLES_FETCH_ERROR = 'ROLES_FETCH_ERROR'
+}
 
 export interface IActionRolesFetch extends Action {
     type: RolesActionEnum.ROLES_FETCH

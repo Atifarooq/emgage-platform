@@ -2,9 +2,8 @@ import * as React from 'react';
 import { themr, ThemedComponentClass } from '@friendsofreactjs/react-css-themr';
 import { classNames } from '@shopify/react-utilities/styles';
 
-import { AllowedEntityStatusColor } from 'Types/Domain';
+import { AllowedEntityStatusColor, RequestStateEnum } from 'Types/Domain';
 import { IRoleDef } from '../Models/RoleDef';
-
 import DrawerSpinner from '../../../Common/Components/DrawerSpinner';
 
 import {
@@ -93,7 +92,6 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
 
   constructor(props: RoleListProp) {
     super(props);
-    console.dir(props);
     this.state = {
       actionInProgress: false,
       activeEntityId: 0,
@@ -114,6 +112,11 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
       loadingRole: false,
       nestedChildData: [],
     };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    state.loadingRole = props.loadingState == RequestStateEnum.LOADING ? true : false;
+    return state;
   }
 
   // Callback function when any row gets selected

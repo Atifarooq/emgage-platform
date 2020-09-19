@@ -1,26 +1,25 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ThemeContext } from '../../../Context';
-import { rolesActions } from "../Package";
-import { RoleDefProp } from '../Models/RoleDefProp';
+import { RoleDefState, RoleDefDispatch } from '../Models';
+import { fetchRoles, RoleList, LoadingRole, RoleDefProp } from "../Package";
 import RoleListComponent from './RoleList';
-import { rolesSelectors } from "../Package";
 
 /**
  * Root component which calls the list component to show the existing role list
  * Then list component calls different other components like create, members, etc
  * @extends React.Component
  */
-class RoleDefComponent extends React.Component<RoleDefProp, any> {
-  
-  constructor(props) {
+class RoleDefComponent extends React.Component<RoleDefProp> {
+
+  constructor(props: RoleDefProp) {
     super(props);
   }
-  
+
   componentDidMount() {
     this.props.loadData();
   }
-  
+
   render() {
     return (
       <div>
@@ -30,6 +29,7 @@ class RoleDefComponent extends React.Component<RoleDefProp, any> {
               <RoleListComponent
                 theme={theme}
                 roleDefs={this.props.roles}
+
               />
             )
           }
@@ -39,13 +39,16 @@ class RoleDefComponent extends React.Component<RoleDefProp, any> {
   }
 }
 
-const mapStateToProps = (state: any): RoleDefProp => {
-  return { roles: rolesSelectors.RoleList(state.rolesReducer) };
+const mapStateToProps = ({ rolesReducer }: any): RoleDefState => {
+  return {
+    roles: RoleList(rolesReducer),
+    loadingState: LoadingRole(rolesReducer),
+  };
 };
 
-const mapDispatchToProps = (dispatch: any): RoleDefProp => {
+const mapDispatchToProps = (dispatch: any): RoleDefDispatch => {
   return {
-    loadData: () => dispatch(rolesActions.fetchRoles())
+    loadData: () => dispatch(fetchRoles())
   };
 };
 

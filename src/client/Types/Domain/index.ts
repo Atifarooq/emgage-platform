@@ -38,3 +38,9 @@ export interface ServerSort {
   callback(field: string, order: string, sortBy: string): void;
 }
 
+export enum RequestStateEnum {
+  INIT = 'INIT',
+  LOADING = 'LOADING',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR'
+}

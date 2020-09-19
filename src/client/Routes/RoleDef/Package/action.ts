@@ -1,18 +1,19 @@
 import { ActionCreator } from 'react-redux';
 import { ThunkAction } from 'redux-thunk';
-import { RolesActionEnum } from "./constant";
-import { IActionRolesFetch, IActionRolesFetchError, IActionRolesFetchSuccess, IRolesListState } from '../Models/RoleAction';
+import {
+  IActionRolesFetch,
+  IActionRolesFetchError,
+  IActionRolesFetchSuccess,
+  IRolesListState,
+  RolesActionEnum
+} from '../Models/RoleAction';
 import roleService from "../../../Services/role.service";
 
 // Action Creators
 export const fetchRoles: ActionCreator<ThunkAction<
-  // The type of the last action to be dispatched - will always be promise<T> for async actions
   Promise<IActionRolesFetchSuccess>,
-  // The type for the data within the last action
   any,
-  // The type of the parameter for the nested function
   IRolesListState,
-  // The type of the last action to be dispatched
   IActionRolesFetchSuccess
 >> = (payload?: IRolesListState) => {
   return async (dispatch: any) => {

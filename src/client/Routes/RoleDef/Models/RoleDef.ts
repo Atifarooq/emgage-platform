@@ -1,4 +1,4 @@
-import { ICommonEnumInterface, IEntityObject } from '../../../Types/Domain';
+import { ICommonEnumInterface, IEntityObject } from 'Types/Domain';
 
 export interface IRoleDef {
   activeVersionStatus: ICommonEnumInterface
