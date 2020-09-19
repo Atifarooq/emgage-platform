@@ -53,6 +53,11 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
   */
   private nestedColumnConfig: Array<{}> = [
     {
+      label: 'Id',
+      key: 'id',
+      noSort: true,
+      style: { width: '160px' },
+    }, {
       label: 'Name',
       key: 'name',
       className: '',

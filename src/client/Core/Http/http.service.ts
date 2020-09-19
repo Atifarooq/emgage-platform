@@ -7,11 +7,12 @@ class HttpService {
 
     constructor() {
         this.config = {
-            baseURL: process.env.REACT_APP_BASE_API_URL || 'http://localhost:3000'
+            baseURL: process.env.REACT_APP_BASE_API_URL || 'http://localhost:3000',
         };
         
         this.client = axios.create(this.config);
     }
+
 
 }
 
