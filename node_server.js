@@ -38,10 +38,10 @@ function fetch_fn(req, res, next) {
 function searchRoles(req, res, next) {
   try {
     {
-      
+
       const queryObject = url.parse(req.url, true).query;
-      const payload = {...queryObject, query: JSON.parse(queryObject.query)};
-      
+      const payload = { ...queryObject, query: JSON.parse(queryObject.query) };
+
       client.search({
         body: payload,
         index: 'roledefs'

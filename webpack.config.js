@@ -81,6 +81,7 @@ module.exports = {
               modules: true,
               importLoaders: 1,
               sourceMap: false,
+              localIdentName: 'Atif-[local]',
             }
           },
           {
