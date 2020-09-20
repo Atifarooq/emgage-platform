@@ -28,7 +28,6 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
   }
 
   filterRoles = (query: any) => {
-    debugger;
     if (query)
       this.props.filterChanged({
         ...this.props.payload, query: [{
