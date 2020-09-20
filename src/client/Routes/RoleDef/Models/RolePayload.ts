@@ -1,6 +1,6 @@
 import { QueryTypeEnum, QueryKeyEnum } from "Types/Domain";
 
-export interface RolePayload {
+export interface IRolePayload {
     from: Number,
     size: Number,
     filter: Filter[],

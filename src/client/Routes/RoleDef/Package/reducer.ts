@@ -1,11 +1,20 @@
 import { combineReducers } from 'redux';
-import { RequestStateEnum } from 'Types/Domain';
-import { IRolesListState, RolesActionEnum } from '../Models/RoleAction';
+import { QueryKeyEnum, QueryTypeEnum, RequestStateEnum } from 'Types/Domain';
+import { IRolesListState, IRolesListPayloadState, RolesActionEnum } from '../Models';
 import { RolesActions } from './Types';
 
 const rolesDefultListState: IRolesListState = {
   state: RequestStateEnum.INIT,
   roles: []
+}
+
+const rolesDefultPayloadState: IRolesListPayloadState = {
+  payload: {
+    from: 0,
+    size: 20,
+    filter: [],
+    query: []
+  }
 }
 
 export default combineReducers<IRolesListState>({
@@ -19,6 +28,14 @@ export default combineReducers<IRolesListState>({
         return { ...state, errorMessage: action.errorMessage, state: RequestStateEnum.ERROR };
       default:
         return { ...state, state: RequestStateEnum.INIT };
+    }
+  },
+  rolesListPayloadReducer: (state: IRolesListPayloadState = rolesDefultPayloadState, action: RolesActions): IRolesListPayloadState => {
+    switch (action.type) {
+      case RolesActionEnum.ROLE_PAYLOAD_CHANGE:
+        return { ...state, payload: { ...action.payload } };
+      default:
+        return state;
     }
   }
 });

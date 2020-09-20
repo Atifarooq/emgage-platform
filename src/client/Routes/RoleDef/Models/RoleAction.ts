@@ -1,11 +1,13 @@
 import { Action } from 'redux';
 import { RequestStateEnum } from 'Types/Domain';
-import { IRoleDef } from '../Models/RoleDef';
+import { IRoleDef } from './RoleDef';
+import { IRolePayload } from './RolePayload';
 
 export enum RolesActionEnum {
     ROLES_FETCH = 'ROLES_FETCH',
     ROLES_FETCH_SUCCESS = 'ROLES_FETCH_SUCCESS',
-    ROLES_FETCH_ERROR = 'ROLES_FETCH_ERROR'
+    ROLES_FETCH_ERROR = 'ROLES_FETCH_ERROR',
+    ROLE_PAYLOAD_CHANGE = 'ROLE_PAYLOAD_CHANGE'
 }
 
 export interface IActionRolesFetch extends Action {
@@ -22,8 +24,7 @@ export interface IActionRolesFetchError extends Action {
     errorMessage: string
 }
 
-export interface IRolesListState {
-    state: RequestStateEnum, // 'INIT', 'LOADING' | 'LOADED' | 'ERROR',
-    roles: IRoleDef[],
-    errorMessage?: string
+export interface IActionRolePayloadChange extends Action {
+    type: RolesActionEnum.ROLE_PAYLOAD_CHANGE,
+    payload: IRolePayload
 }

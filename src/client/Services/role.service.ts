@@ -20,11 +20,8 @@ class RoleService extends HttpService {
     fetchRoles = async payload => {
         try {
 
-            debugger;
-            console.dir(payload);
-
             const query = bodybuilder().from(payload.from).size(payload.size);
-            
+
             if (payload.filter && payload.filter.length) {
                 payload.filter.forEach(q => {
                     if (q.type == QueryTypeEnum.filter)
@@ -41,14 +38,6 @@ class RoleService extends HttpService {
                 });
             }
 
-            // const query = bodybuilder()
-            //     .from(0)
-            //     .size(20)
-            //     .filter('term', 'entityState.itemID', '5')
-            //     .query('multi_match', 'fields', ["name", "description"], { 'query': 'int_role-name', 'type': 'phrase_prefix' })
-            //     .build();
-
-            // debugger;
             const response = await this.client.get(`/searchRoles`, { params: query.build() });
             return response.data;
         } catch (error) {

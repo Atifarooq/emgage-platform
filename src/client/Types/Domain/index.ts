@@ -31,6 +31,7 @@ export enum QueryTypeEnum {
 
 export enum QueryKeyEnum {
   term = 'term',
+  terms = 'terms',
   multi_match = 'multi_match'
 }
 

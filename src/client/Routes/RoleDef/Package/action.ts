@@ -4,12 +4,20 @@ import {
   IActionRolesFetch,
   IActionRolesFetchError,
   IActionRolesFetchSuccess,
-  IRolesListState, 
+  IActionRolePayloadChange,
+  IRolesListState,
   RolesActionEnum
 } from '../Models';
 import roleService from "../../../Services/role.service";
 
 // Action Creators
+export const filterChanged = (payload): IActionRolePayloadChange => {
+  return {
+    type: RolesActionEnum.ROLE_PAYLOAD_CHANGE,
+    payload
+  }
+}
+
 export const fetchRoles: ActionCreator<ThunkAction<
   Promise<IActionRolesFetchSuccess>,
   any,
@@ -17,7 +25,7 @@ export const fetchRoles: ActionCreator<ThunkAction<
   IActionRolesFetchSuccess
 >> = (payload?: any) => {
   return async (dispatch: any) => {
-   
+
     const rolesFetchAction: IActionRolesFetch = {
       type: RolesActionEnum.ROLES_FETCH,
     };

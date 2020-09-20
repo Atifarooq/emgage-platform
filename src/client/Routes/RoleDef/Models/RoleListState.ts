@@ -1,3 +1,7 @@
+import { RequestStateEnum } from 'Types/Domain';
+import { IRoleDef } from './RoleDef';
+import { IRolePayload } from './RolePayload';
+
 interface BulkActionType {
   selectedRow: Array<number | string>;
 }
@@ -44,9 +48,21 @@ export interface RoleListState {
   loadingRole: boolean;
   // OPen the edit drawer
   editMember: boolean;
+  // to show roles havineg status deleted
+  showDeleted: boolean;
   // THis helps to implement show deleted functionality
   // It as key of the data & its value which we want to hide
   hideRow: HideRowType;
   // State to store nestedchild component which will be shown on row expand
   nestedChildData: TableNestedData[];
+}
+
+export interface IRolesListState {
+  state: RequestStateEnum, // 'INIT', 'LOADING' | 'LOADED' | 'ERROR',
+  roles: IRoleDef[],
+  errorMessage?: string
+}
+
+export interface IRolesListPayloadState {
+  payload: IRolePayload
 }

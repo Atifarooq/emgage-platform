@@ -8,7 +8,8 @@ const middlewares = [thunk];
 const enhancer = compose(applyMiddleware(...middlewares));
 
 // state on app start
-const initialState = {};
+const initialState = {
+};
 
 // create store
 const store = createStore(rootReducer(), initialState, enhancer);

@@ -5,5 +5,6 @@ export interface RoleListProp {
   roleDefs: IRoleDef[];
   loadingState: RequestStateEnum,
   onFilter: Function,
+  onShowDeleted: Function,
   theme?: any;
 }

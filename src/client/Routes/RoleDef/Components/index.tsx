@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ThemeContext } from '../../../Context';
 import { QueryTypeEnum, QueryKeyEnum } from 'Types/Domain';
 import { RoleDefState, RoleDefDispatch } from '../Models';
-import { fetchRoles, RoleList, LoadingRole, RoleDefProp, RoleDefaultPayload } from "../Package";
+import { fetchRoles, filterChanged, RoleList, LoadingRole, RoleDefProp, RoleListPayload } from "../Package";
 import RoleListComponent from './RoleList';
 
 /**
@@ -18,45 +18,74 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
   }
 
   componentDidMount() {
+    this.getRoles();
+  }
 
-    this.setState({
-      payload: {
-        from: 1,
-        size: 20,
-        filter: [{
+  componentDidUpdate(prevProps) {
+    if (this.props.payload !== prevProps.payload) {
+      this.props.loadData(this.props.payload);
+    }
+  }
+
+  filterRoles = (query: any) => {
+    
+    if (query) {
+      this.props.filterChanged({
+        ...this.props.payload, query: [{
+          type: QueryTypeEnum.query,
+          key: QueryKeyEnum.multi_match,
+          modelfield: 'fields',
+          value: ['name', 'description'],
+          options: { 'query': query, 'type': 'phrase_prefix' }
+        }]
+      });
+    }
+    else {
+      this.props.filterChanged({
+        ...this.props.payload, query: []
+      });
+    }
+    // if (query) {
+    //   this.setState({
+    //     payload: {
+    //       ...this.state.payload, query: [{
+    //         type: QueryTypeEnum.query,
+    //         key: QueryKeyEnum.multi_match,
+    //         modelfield: 'fields',
+    //         value: ['name', 'description'],
+    //         options: { 'query': query, 'type': 'phrase_prefix' }
+    //       }]
+    //     }
+    //   }, () => {
+    //     this.props.loadData(this.state.payload);
+    //   });
+    // }
+    // else this.setState({
+    //   payload: { ...this.state.payload, query: [] }
+    // }, () => {
+    //   this.props.loadData(this.state.payload);
+    // });
+  }
+
+  getRoles = (deleted: boolean = false) => {
+    if (deleted)
+      this.props.filterChanged({
+        ...this.props.payload, filter: [{
+          type: QueryTypeEnum.filter,
+          key: QueryKeyEnum.terms,
+          modelfield: 'entityState.itemID',
+          value: ['7', '5']
+        }]
+      });
+    else
+      this.props.filterChanged({
+        ...this.props.payload, filter: [{
           type: QueryTypeEnum.filter,
           key: QueryKeyEnum.term,
           modelfield: 'entityState.itemID',
           value: '5'
-        }],
-        query: []
-      }
-    }, () => {
-      this.props.loadData(this.state.payload);
-    });
-  }
-
-  fetchRoles = (query: any) => {
-    if (query) {
-      this.setState({
-        payload: {
-          ...this.state.payload, query: [{
-            type: QueryTypeEnum.query,
-            key: QueryKeyEnum.multi_match,
-            modelfield: 'fields',
-            value: ['name', 'description'],
-            options: { 'query': query, 'type': 'phrase_prefix' }
-          }]
-        }
-      }, () => {
-        this.props.loadData(this.state.payload);
+        }]
       });
-    }
-    else this.setState({
-      payload: { ...this.state.payload, query: [] }
-    }, () => {
-      this.props.loadData(this.state.payload);
-    });
   }
 
   render() {
@@ -69,7 +98,8 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
                 theme={theme}
                 roleDefs={this.props.roles}
                 loadingState={this.props.loadingState}
-                onFilter={this.fetchRoles}
+                onFilter={this.filterRoles}
+                onShowDeleted={this.getRoles}
               />
             )
           }
@@ -83,13 +113,14 @@ const mapStateToProps = ({ rolesReducer }: any): RoleDefState => {
   return {
     roles: RoleList(rolesReducer),
     loadingState: LoadingRole(rolesReducer),
-    payload: RoleDefaultPayload()
+    payload: RoleListPayload(rolesReducer)
   };
 };
 
 const mapDispatchToProps = (dispatch: any): RoleDefDispatch => {
   return {
-    loadData: payload => dispatch(fetchRoles(payload))
+    loadData: payload => dispatch(fetchRoles(payload)),
+    filterChanged: payload => dispatch(filterChanged(payload))
   };
 };
 

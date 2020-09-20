@@ -86,7 +86,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
   // function needs to be called on onChange for checkBox
   private bulkOptions = () => {
     return [{
-      content: <Checkbox label={'Show Deleted'} />
+      content: <Checkbox label={'Show Deleted'} checked={this.state.showDeleted} onChange={this.onChange} />
     }]
   };
 
@@ -108,6 +108,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
         search: false,
         field: 'name',
       },
+      showDeleted: false,
       hideRow: {},
       loadingRole: false,
       nestedChildData: [],
@@ -131,9 +132,8 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
   }
 
   filterEnterPress = (event: React.FormEvent<HTMLElement>) => {
-    if (event['key'] === 'Enter') {
+    if (event['key'] === 'Enter')
       this.props.onFilter(event.currentTarget['value']);
-    }
   }
 
   searchKeyChanged = (event: string) => {
@@ -145,7 +145,12 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
       }
     })
   }
-  
+
+  onChange = (event: any) => {
+    this.setState({ showDeleted: event }, () =>
+      this.props.onShowDeleted(event)
+    );
+  }
   /**
    * Render the component to the DOM
    * @returns {}
