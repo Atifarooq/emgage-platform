@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { QueryKeyEnum, QueryTypeEnum, RequestStateEnum } from 'Types/Domain';
+import { RequestStateEnum } from 'Types/Domain';
 import { IRolesListState, IRolesListPayloadState, RolesActionEnum } from '../Models';
 import { RolesActions } from './Types';
 

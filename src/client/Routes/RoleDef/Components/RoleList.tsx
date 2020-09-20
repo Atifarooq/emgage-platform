@@ -29,6 +29,7 @@ import {
 import { RoleListState } from '../Models/RoleListState';
 import { RoleListProp } from '../Models/RoleListProp';
 import { ROLE } from '../../../ThemeIdentifiers';
+import SearchBox from 'Common/Components/SearchBox';
 
 const baseTheme = require('../Styles/RoleList.scss');
 const TableStyle = require('../../../Theme/Table.scss');
@@ -131,20 +132,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
     });
   }
 
-  filterEnterPress = (event: React.FormEvent<HTMLElement>) => {
-    if (event['key'] === 'Enter')
-      this.props.onFilter(event.currentTarget['value']);
-  }
-
-  searchKeyChanged = (event: string) => {
-    this.setState({
-      filterConfig: {
-        searchKey: event,
-        search: false,
-        field: 'name'
-      }
-    })
-  }
+  searchKeyChanged = (event: string) => this.props.onFilter(event);
 
   onChange = (event: any) => {
     this.setState({ showDeleted: event }, () =>
@@ -203,13 +191,7 @@ class RoleListComponent extends React.Component<RoleListProp, RoleListState> {
               </div>
 
               <div className={searchFieldStyle}>
-                <TextField
-                  label="Find a Role..."
-                  suffix={<Icon source="search" componentColor="inkLighter" />}
-                  value={filterConfig.searchKey}
-                  onChange={this.searchKeyChanged}
-                  onKeyPress={this.filterEnterPress}
-                />
+                <SearchBox onSearch={this.searchKeyChanged} placeholder="Find a Role..." />
               </div>
 
               <div className={theme.commonLeftMargin}>

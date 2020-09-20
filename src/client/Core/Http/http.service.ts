@@ -1,4 +1,4 @@
-import axios, { AxiosStatic, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 class HttpService {
 

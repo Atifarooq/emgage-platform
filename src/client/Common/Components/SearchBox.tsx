@@ -1,31 +1,43 @@
-import * as React from 'react';
+import * as React from "react";
+import { debounce } from "lodash";
 import { Icon, TextField } from 'engage-ui';
-import { ThemedComponentClass } from '@friendsofreactjs/react-css-themr';
-import { classNames } from '@shopify/react-utilities/styles';
 
-export interface IProps {
-    componentClass?: string;
-    componentStyle?: any;
-    searchKey?: string;
+interface SearchCriteriaProps {
+    placeholder: string;
+    onSearch: (criteria: string) => void;
+}
+interface SearchCriteriaState {
+    criteria: string;
 }
 
-class SearchBox extends React.Component<IProps, {}> {
-    constructor(props: IProps) {
+class SearchBox extends React.Component<SearchCriteriaProps, SearchCriteriaState> {
+
+    constructor(props) {
         super(props);
+
+        this.state = {
+            criteria: ""
+        };
     }
-    
+
+    raiseDoSearchWhenUserStoppedTyping = debounce(() => this.props.onSearch(this.state.criteria), 500);
+
+    handleCriteriaChange = (e: React.FormEvent<HTMLInputElement>) => {
+        this.setState({ criteria: e.toString() }, () => {
+            this.raiseDoSearchWhenUserStoppedTyping();
+        });
+    };
 
     render() {
         return (
-            <div>
-                <TextField
-                    label="Find a Role..."
-                    suffix={<Icon source="search" componentColor="inkLighter" />}
-                    value={this.props.searchKey}
-                />
-            </div >
-        )
+            <TextField
+                label={this.props.placeholder}
+                suffix={<Icon source="search" componentColor="inkLighter" />}
+                value={this.state.criteria}
+                onChange={this.handleCriteriaChange}
+            />
+        );
     }
 }
 
-export default (SearchBox) as ThemedComponentClass<IProps, {}>;
+export default SearchBox;
