@@ -28,8 +28,8 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
   }
 
   filterRoles = (query: any) => {
-    
-    if (query) {
+
+    if (query)
       this.props.filterChanged({
         ...this.props.payload, query: [{
           type: QueryTypeEnum.query,
@@ -39,32 +39,10 @@ class RoleDefComponent extends React.Component<RoleDefProp, RoleDefState> {
           options: { 'query': query, 'type': 'phrase_prefix' }
         }]
       });
-    }
-    else {
+    else
       this.props.filterChanged({
         ...this.props.payload, query: []
       });
-    }
-    // if (query) {
-    //   this.setState({
-    //     payload: {
-    //       ...this.state.payload, query: [{
-    //         type: QueryTypeEnum.query,
-    //         key: QueryKeyEnum.multi_match,
-    //         modelfield: 'fields',
-    //         value: ['name', 'description'],
-    //         options: { 'query': query, 'type': 'phrase_prefix' }
-    //       }]
-    //     }
-    //   }, () => {
-    //     this.props.loadData(this.state.payload);
-    //   });
-    // }
-    // else this.setState({
-    //   payload: { ...this.state.payload, query: [] }
-    // }, () => {
-    //   this.props.loadData(this.state.payload);
-    // });
   }
 
   getRoles = (deleted: boolean = false) => {
